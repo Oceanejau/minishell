@@ -3,16 +3,121 @@
 #include <unistd.h>
 #include <stdlib.h>
 
+/*
+	recupere info en ligne de commande 
+	parse un pipe
+	renvoie,
+	le rezsultat est stocke dans a struct
+	etc jusqua \n
+	reset dans le struct
+
+
+
+fonctiona a coder:
+	+ (char *str, int deb, int fin) recoit un char * et deux int, un debut une fin, renvoie un char * qui contient les char entre le debut et la fin malloc.
+	+ where_is_charly(char *str, int deb, char c) recoit un char * un int de debut et un char, cherche le prochain char identique et renvoie un int de sa position
+	+ 
+
+*/
+
+echo
+export
+env
+exit
+
+cd
+pwd
+
+unset
+
+char	*put_string_in(char *from, int x, char delim)
+{
+	int	y;
+
+	char	*str;
+
+	y = 0;
+	while (from[x + y] != delim)
+		y++;
+	str = (char *)malloc(sizeof(char) * (y + 1));
+	if (!str)
+		return (NULL);
+	y = 0;
+	while (from[x + y] != delim)
+	{
+		str[y] = from[x + y];
+		y++;
+	}
+	str[y] = '\0';
+	return (str);
+}
+
+int	go_next(t_mimi *shell, int x, char *str)
+{
+	int	y;
+	char	*tmp;
+
+	y = 0;
+	shell->command = str;
+	while (shell->line[x] == ' ')
+		x++;
+	while (shell->line[x + y] != '|' && shell->line[x + y] != '\n')
+		y++;
+	while (shell->line[x + --y] == ' ')
+		y--;//a voir si ca tourne avec ca
+	tmp = (char *)malloc(sizeof(char) * (y + 1));
+	if (!tmp)
+		return (-1);
+	y = 0;
+	while (shell->line[x + y] != '|' && shell->line[x + y] != '\n')
+	{
+		tmp[y] = shell->line[x + y];
+		y++;
+	}
+	return (x);
+}
+
+int	get_command(t_mimi *shell, int x)
+{
+	int	comp;
+
+	comp = compare(shell->line, x, "cd ");
+	if (comp != -1)
+	{
+		x = go_next(shell, x, "cd");		
+	}
+	return (x);
+}
+
+int	casser_sa_pipe(t_mimi *shell)
+{
+	int	x;
+
+	x = 0;
+	while (shell->line[x] != '\0')
+	{
+		while (shell->line[x] == ' ')
+			x++;
+		get_command(shell, x);
+		if (shell->line[x] == )
+			
+		x++;
+	}
+	return (0);
+}
+
 typedef struct	s_mimi
 {
 		int	run;//tant que run est suppérieur à 0 ca tourne, si run inf a 0 return erreur, si run == 0 == fin
 		char	***str;
 		char	*line;
+		char	*command;
+		char	*args;
 		int	ret_line;
 		int	end;
-		int	y;
-		int	x;
-		int	z;
+		int	y;//pipes
+		int	x;//nb d'args a placer
+		int	z;//nb char a placer
 }		t_mimi;
 
 void	print_tab(t_mimi *shell)
@@ -194,32 +299,43 @@ int	putin_tab(char *str, t_mimi *shell)
 	return (0);
 }
 
-void	alloc_tab(t_mimi *shell)
+int	semi_parse_tab(t_mimi *shell)
+{
+	int	x;
+
+	while (shell->line[x] != '\0')
+	{
+		if ()
+	}
+	return (0);
+}
+
+int	alloc_tab(t_mimi *shell)
 {
 	int	x;
 	int	y;
 
 	x = 0;
 	y = 0;
-	shell->str = (char ***)malloc(sizeof(char **) * (size_y * size_x * size_z));
+	shell->str = (char ***)malloc(sizeof(char **) * (shell->y * shell->x * shell->z));
 	if (shell->str == NULL)
-		return (-1);
-	while (y < size_y)
+		return (-1);///
+	while (y < shell->y)
 	{
-		shell->str[y] = (char **)malloc(sizeof(char *) * (size_x * size_z));//malloc les col
+		shell->str[y] = (char **)malloc(sizeof(char *) * (shell->x * shell->z));//malloc les col
 		if (shell->str[y] == NULL)
-			return (-1);
-		while (x < size_x)
+			return (-1);///
+		while (x < shell->x)
 		{
-			shell->str[y][x] = (char *)malloc(sizeof(char) * (size_z));//malloc les futures strings.
+			shell->str[y][x] = (char *)malloc(sizeof(char) * (shell->z));//malloc les futures strings.
 			if (shell->str[y][x] == NULL)
-				return (-1);
+				return (-1);///
 			x++;
 		}
 
 		y++;
 	}
-	return ;
+	return (0);
 }
 
 
@@ -228,14 +344,14 @@ int	struct_init(t_mimi *shell)
 	int	size_y = 2;
 	int	size_x = 3;
 	int	size_z = 10;
-	int	x = 0;
-	int	y = 0;
+//	int	x = 0;
+//	int	y = 0;
 
 	shell->y = size_y;
 	shell->x = size_x;
 	shell->z = size_z;
 	shell->run = 1;
-	shell->str = (char ***)malloc(sizeof(char **) * (size_y * size_x * size_z));
+/*	shell->str = (char ***)malloc(sizeof(char **) * (size_y * size_x * size_z));
 	if (shell->str == NULL)
 		return (-1);
 	while (y < size_y)
@@ -252,7 +368,7 @@ int	struct_init(t_mimi *shell)
 		}
 
 		y++;
-	}
+	}*/
 //	printf("fin des allocs de colonnes\n");
 	/*	while (x < size_x)
 		{
@@ -261,11 +377,11 @@ int	struct_init(t_mimi *shell)
 		return (-1);
 		x++;
 		}*/
-	printf("fin des allocs des lignes\n");
+//	printf("fin des allocs des lignes\n");
 	//	shell->str[0][0] = "colA";	
 	//	shell->str[1][0] = "colB";
 	//	printf("col AB\n");	
-	shell->str[0][0] = "ligne1A";	
+/*	shell->str[0][0] = "ligne1A";	
 	shell->str[0][1] = "ligne2A";	
 	shell->str[0][2] = "ligne3A";	
 	shell->str[1][0] = "ligne1B";	
@@ -274,9 +390,10 @@ int	struct_init(t_mimi *shell)
 	printf("fin des textes\n");
 	//	shell->str[0][0] = "col1";	
 	//	shell->str[0][0] = "col1";
-	print_tab(shell);
-	return (0);	
-}
+	print_tab(shell);*/
+	return (0);
+}	
+
 /*
 void	printf_tab(t_mimi *shell)
 {
@@ -322,7 +439,7 @@ int	main(int ac, char **av)
 
 	if (ac != 1)
 	{
-		printf("Error: starting suppose no arguments");//
+		printf("Error: starting suppose no arguments\n");//
 		return (-1);
 	}
 	struct_init(&shell);

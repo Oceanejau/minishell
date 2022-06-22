@@ -261,6 +261,23 @@ char    *till_the_n(t_mimi *shell)
         return (str);
 }
 
+void	init_bullshit(t_mimi *shell)
+{
+	int	x;
+
+	x = 0;
+	shell->y = 0;
+	while (shell->line[x] != '\0')
+	{
+		if (shell->line[x] == '|')
+			shell->y++;
+		x++;
+	}
+}
+/*	int	y;//pipes
+		int	x;//nb d'args a placer
+		int	z;//nb char a placer
+*/
 int	putin_tab(char *str, t_mimi *shell)
 {
 	int	pipe;
@@ -269,6 +286,7 @@ int	putin_tab(char *str, t_mimi *shell)
 
 	x = 0;
 	pipe = 0;
+	init_bullshit(shell);
 //	printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
 	while (str[x] != '\0')
 	{
@@ -416,7 +434,7 @@ int	struct_init(t_mimi *shell)
 	//	shell->str[0][0] = "colA";	
 	//	shell->str[1][0] = "colB";
 	//	printf("col AB\n");	
-	shell->str[0][0] = "ligne1A";	
+/*	shell->str[0][0] = "ligne1A";	
 	shell->str[0][1] = "ligne2A";	
 	shell->str[0][2] = "ligne3A";	
 	shell->str[1][0] = "ligne1B";	
@@ -425,7 +443,7 @@ int	struct_init(t_mimi *shell)
 	printf("fin des textes\n");
 	//	shell->str[0][0] = "col1";	
 	//	shell->str[0][0] = "col1";
-	print_tab(shell);
+	print_tab(shell);*/
 	return (0);
 }	
 
@@ -481,11 +499,12 @@ int	main(int ac, char **av)
 	while (shell.run > 0)
 	{
 		shell.line = till_the_n(&shell);
-		printf("line = %s\n", shell.line);
+		printf("ligne lue = %s\n", shell.line);
 		
 	//	free_tab(&shell);
-		printf("sortie\n");
+	//	printf("sortie\n");
 		putin_tab(shell.line, &shell);
+		printf("main-> after put in tab\n");
 		print_tab(&shell);
 		free_tab(&shell);
 		free(shell.line);//??

@@ -12,6 +12,11 @@
 	reset dans le struct
 
 
+include errno.h
+ne gere aue les appels system
+
+__FILE__ __LINE__
+voir assert (programme crash when param wrong)
 
 fonctiona a coder:
 	+ (char *str, int deb, int fin) recoit un char * et deux int, un debut une fin, renvoie un char * qui contient les char entre le debut et la fin malloc.
@@ -20,7 +25,7 @@ fonctiona a coder:
 
 */
 
-echo
+/*echo
 export
 env
 exit
@@ -29,6 +34,50 @@ cd
 pwd
 
 unset
+*/
+
+typedef struct	s_mimi
+{
+		int	run;//tant que run est suppérieur à 0 ca tourne, si run inf a 0 return erreur, si run == 0 == fin
+		char	***str;
+		char	*line;
+		char	*command;
+		char	*args;
+		int	ret_line;
+		int	end;
+		int	y;//pipes
+		int	x;//nb d'args a placer
+		int	z;//nb char a placer
+}		t_mimi;
+
+
+char	*piece_of_string(char *str, int deb, int fin)//
+{
+	char	*tmp;
+	int	x;
+
+	x = 0;
+	tmp = (char *)malloc(sizeof(char) * (fin - deb + 1));
+	if (!tmp)
+		return (NULL);
+	while (deb + x < fin)
+	{
+		tmp[x] = str[deb + x];
+		x++;
+	}
+	tmp[x] = '\0';
+	return(tmp);
+}
+
+/*int	where_is_charly(char *str, int deb, char c)//get a string, a starting point, and a char, return an ending point
+{
+	int	x;
+
+	x = 0;
+	while (str[x] != c)
+		x++;
+	return (x);
+}*/
 
 char	*put_string_in(char *from, int x, char delim)
 {
@@ -76,19 +125,19 @@ int	go_next(t_mimi *shell, int x, char *str)
 	}
 	return (x);
 }
-
+/*
 int	get_command(t_mimi *shell, int x)
 {
 	int	comp;
 
-	comp = compare(shell->line, x, "cd ");
+//	comp = compare(shell->line, x, "cd ");
 	if (comp != -1)
 	{
 		x = go_next(shell, x, "cd");		
 	}
 	return (x);
 }
-
+*//*
 int	casser_sa_pipe(t_mimi *shell)
 {
 	int	x;
@@ -99,27 +148,13 @@ int	casser_sa_pipe(t_mimi *shell)
 		while (shell->line[x] == ' ')
 			x++;
 		get_command(shell, x);
-		if (shell->line[x] == )
+//		if (shell->line[x] == )
 			
 		x++;
 	}
 	return (0);
 }
-
-typedef struct	s_mimi
-{
-		int	run;//tant que run est suppérieur à 0 ca tourne, si run inf a 0 return erreur, si run == 0 == fin
-		char	***str;
-		char	*line;
-		char	*command;
-		char	*args;
-		int	ret_line;
-		int	end;
-		int	y;//pipes
-		int	x;//nb d'args a placer
-		int	z;//nb char a placer
-}		t_mimi;
-
+*/
 void	print_tab(t_mimi *shell)
 {
 	int	y, x;
@@ -299,7 +334,7 @@ int	putin_tab(char *str, t_mimi *shell)
 	return (0);
 }
 
-int	semi_parse_tab(t_mimi *shell)
+/*int	semi_parse_tab(t_mimi *shell)
 {
 	int	x;
 
@@ -308,7 +343,7 @@ int	semi_parse_tab(t_mimi *shell)
 		if ()
 	}
 	return (0);
-}
+}*/
 
 int	alloc_tab(t_mimi *shell)
 {
@@ -381,7 +416,7 @@ int	struct_init(t_mimi *shell)
 	//	shell->str[0][0] = "colA";	
 	//	shell->str[1][0] = "colB";
 	//	printf("col AB\n");	
-/*	shell->str[0][0] = "ligne1A";	
+	shell->str[0][0] = "ligne1A";	
 	shell->str[0][1] = "ligne2A";	
 	shell->str[0][2] = "ligne3A";	
 	shell->str[1][0] = "ligne1B";	
@@ -390,7 +425,7 @@ int	struct_init(t_mimi *shell)
 	printf("fin des textes\n");
 	//	shell->str[0][0] = "col1";	
 	//	shell->str[0][0] = "col1";
-	print_tab(shell);*/
+	print_tab(shell);
 	return (0);
 }	
 
